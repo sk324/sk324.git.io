@@ -4,20 +4,24 @@
   <meta charset="utf-8">
   
   
-  <title>C语言字符串拼接问题——使用sprintf()函数 | Hexo</title>
+  <title>Ubuntu同时开启两张网卡 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="问题引出​	写一个程序向一个文件写入内容，当写入文件大小超过 xxxB 时，关闭该文件，重新创建一个文件继续写入。 ​	可应用于写日志文件——保证每个日志文件的大小不过大。 ​	在给文件命名时遇到问题：欲创建并打开“.&#x2F;xxx0 ”,“.&#x2F;xxx1 ”,“.&#x2F;xxx2 ”的文件来写入数据。想到将字符串“.&#x2F;xxx”与int num拼接起来，在此，拼接该字符串">
+  <meta name="description" content="问题：不能同时使用两张网卡最近受实习公司安排在学习raw socket。用其写了一个简单的自定义协议(ETHER_Hdr + data)。想测试其能否正常通信，于是想到在虚拟机中再添加一张虚拟网卡，一张用于发送消息一张用于接收消息。 添加操作还是比较简单，主要分两步：  在虚拟机的设置中添加一个网络适配器并选择想要的连接方式：    ​	根据需要在虚拟网络编辑器处添加虚拟网卡   进行上述操作后，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C语言字符串拼接问题——使用sprintf()函数">
-<meta property="og:url" content="http://example.com/2023/10/07/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:title" content="Ubuntu同时开启两张网卡">
+<meta property="og:url" content="http://example.com/2023/10/27/Ubuntu%E5%90%8C%E6%97%B6%E5%BC%80%E5%90%AF%E4%B8%A4%E5%BC%A0%E7%BD%91%E5%8D%A1/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="问题引出​	写一个程序向一个文件写入内容，当写入文件大小超过 xxxB 时，关闭该文件，重新创建一个文件继续写入。 ​	可应用于写日志文件——保证每个日志文件的大小不过大。 ​	在给文件命名时遇到问题：欲创建并打开“.&#x2F;xxx0 ”,“.&#x2F;xxx1 ”,“.&#x2F;xxx2 ”的文件来写入数据。想到将字符串“.&#x2F;xxx”与int num拼接起来，在此，拼接该字符串">
+<meta property="og:description" content="问题：不能同时使用两张网卡最近受实习公司安排在学习raw socket。用其写了一个简单的自定义协议(ETHER_Hdr + data)。想测试其能否正常通信，于是想到在虚拟机中再添加一张虚拟网卡，一张用于发送消息一张用于接收消息。 添加操作还是比较简单，主要分两步：  在虚拟机的设置中添加一个网络适配器并选择想要的连接方式：    ​	根据需要在虚拟网络编辑器处添加虚拟网卡   进行上述操作后，">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-10-07T08:28:42.000Z">
-<meta property="article:modified_time" content="2023-10-11T06:07:27.610Z">
+<meta property="og:image" content="c:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231027162632884.png">
+<meta property="og:image" content="c:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231027162821388.png">
+<meta property="og:image" content="c:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231027163712892.png">
+<meta property="article:published_time" content="2023-10-27T08:16:42.000Z">
+<meta property="article:modified_time" content="2023-10-27T09:07:27.913Z">
 <meta property="article:author" content="John Doe">
-<meta property="article:tag" content="字符串">
+<meta property="article:tag" content="Ubuntu网络配置">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231027162632884.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -76,12 +80,16 @@
 </header>
 
       <div class="outer">
-        <section id="main"><article id="post-字符串拼接问题" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+        <section id="main"><article id="post-Ubuntu同时开启两张网卡" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/2023/10/07/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5%E9%97%AE%E9%A2%98/" class="article-date">
-  <time class="dt-published" datetime="2023-10-07T08:28:42.000Z" itemprop="datePublished">2023-10-07</time>
+    <a href="/2023/10/27/Ubuntu%E5%90%8C%E6%97%B6%E5%BC%80%E5%90%AF%E4%B8%A4%E5%BC%A0%E7%BD%91%E5%8D%A1/" class="article-date">
+  <time class="dt-published" datetime="2023-10-27T08:16:42.000Z" itemprop="datePublished">2023-10-27</time>
 </a>
     
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Ubuntu%E9%85%8D%E7%BD%AE/">Ubuntu配置</a>
+  </div>
+
   </div>
   <div class="article-inner">
     
@@ -90,7 +98,7 @@
         
   
     <h1 class="p-name article-title" itemprop="headline name">
-      C语言字符串拼接问题——使用sprintf()函数
+      Ubuntu同时开启两张网卡
     </h1>
   
 
@@ -98,33 +106,50 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h1 id="问题引出"><a href="#问题引出" class="headerlink" title="问题引出"></a>问题引出</h1><p>​	写一个程序向一个文件写入内容，当写入文件大小超过 <em>xxxB</em> 时，关闭该文件，重新创建一个文件继续写入。</p>
-<p>​	可应用于写日志文件——保证每个日志文件的大小不过大。</p>
-<p>​	在给文件命名时遇到问题：欲创建并打开“.&#x2F;xxx0 ”,“.&#x2F;xxx1 ”,“.&#x2F;xxx2 ”的文件来写入数据。想到将字符串“.&#x2F;xxx”与int num拼接起来，在此，拼接该字符串与整型时遇到问题，记录一下如何解决的。</p>
-<h1 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h1><ul>
-<li>用**sprintf()**函数</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> fName[<span class="number">32</span>] = &#123;<span class="number">0</span>&#125;;  <span class="comment">// 打开文件路径</span></span><br><span class="line"><span class="built_in">sprintf</span>(fName, <span class="string">&quot;%s%d&quot;</span>, <span class="string">&quot;./madaemon&quot;</span>, i);  <span class="comment">// 拼接&quot;./madaemon&quot; 与 i</span></span><br><span class="line">fd = open(fName, O_RDWR | O_CREAT | O_APPEND, <span class="number">0777</span>);</span><br></pre></td></tr></table></figure>
+        <h3 id="问题：不能同时使用两张网卡"><a href="#问题：不能同时使用两张网卡" class="headerlink" title="问题：不能同时使用两张网卡"></a>问题：不能同时使用两张网卡</h3><p>最近受实习公司安排在学习raw socket。用其写了一个简单的自定义协议(ETHER_Hdr + data)。想测试其能否正常通信，于是想到在虚拟机中再添加一张虚拟网卡，一张用于发送消息一张用于接收消息。</p>
+<p>添加操作还是比较简单，主要分两步：</p>
+<ol>
+<li>在虚拟机的设置中添加一个网络适配器并选择想要的连接方式：</li>
+</ol>
+<p><img src="C:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231027162632884.png" alt="image-20231027162632884"></p>
+<ol start="2">
+<li>​	根据需要在虚拟网络编辑器处添加虚拟网卡</li>
+</ol>
+<p><img src="C:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231027162821388.png" alt="image-20231027162821388"></p>
+<p>进行上述操作后，打开ubuntu20.04。</p>
+<p>用<code>ifconfig</code>命令查看网卡信息，发现现在有两张网卡了，但是只能有一个有ip地址。再发现：两张网卡也不能同时使用，这样肯定是无法模拟通信的。</p>
+<p>同时开启两张网卡解决方式如下：</p>
+<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><blockquote>
+<p>ubuntu从17.10开始，已放弃在&#x2F;etc&#x2F;network&#x2F;interface里固定IP的配置，即使配置也不会生效，而是改成netplan方式，即下面我们用到的这个配置文件</p>
+</blockquote>
+<ol>
+<li>更改如下的配置文件：</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rz@rz-virtual-machine:~$ vim /etc/netplan/01-network-manager-all.yaml </span><br></pre></td></tr></table></figure>
 
-<p>这里需要注意：sprintf函数的第一个参数定义一个char数组传入就行了，要确保数组长度有文件路径那么长。</p>
-<h1 id="错误想法"><a href="#错误想法" class="headerlink" title="错误想法"></a>错误想法</h1><ul>
-<li>将一个整型的数强转为数字字符串——不可行</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">char *c = (char*)malloc(sizeof(int));</span><br><span class="line">c = &amp;i;</span><br><span class="line">printf(&quot;%s\n&quot;, c);   // 输出的是i值对应的ASCII码值的字符</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>添加如下内容：</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Let NetworkManager manage all devices on this system</span></span><br><span class="line">network:</span><br><span class="line">  version: 2</span><br><span class="line">  renderer: NetworkManager</span><br><span class="line">  ethernets:</span><br><span class="line">    ens33:</span><br><span class="line">      dhcp4: true</span><br><span class="line">    ens37:</span><br><span class="line">      dhcp4: true</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li>使用itoa()函数——不可行</li>
-</ul>
-<p>Linux下没有这个库函数</p>
+<p>注意冒号后面有个空格。ens33和ens37分别是网卡的名字。编辑完后保存退出</p>
+<ol start="3">
+<li>使配置生效</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netplan apply</span><br></pre></td></tr></table></figure>
+
+<p>over!现在发现可以同时打开两张网卡了。</p>
+<p><img src="C:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231027163712892.png" alt="image-20231027163712892"></p>
+<p>说个题外话：测试程序通信的时候要注意两个网卡的ip要在同一网段下。不然无法正常通信~</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/10/07/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5%E9%97%AE%E9%A2%98/" data-id="clno9pnxs0001wwv6hvbj6d0e" data-title="C语言字符串拼接问题——使用sprintf()函数" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2023/10/27/Ubuntu%E5%90%8C%E6%97%B6%E5%BC%80%E5%90%AF%E4%B8%A4%E5%BC%A0%E7%BD%91%E5%8D%A1/" data-id="clojv053y0000a0v64yao98qt" data-title="Ubuntu同时开启两张网卡" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag">字符串</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ubuntu%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/" rel="tag">Ubuntu网络配置</a></li></ul>
 
     </footer>
   </div>
@@ -132,19 +157,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2023/10/10/%E6%B6%88%E8%B4%B9%E8%80%85-%E7%94%9F%E4%BA%A7%E8%80%85%E6%A8%A1%E5%9E%8B-mutex%E5%92%8Ccond%E5%AE%9E%E7%8E%B0/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          消费者-生产者模型(mutex和cond实现)
-        
-      </div>
-    </a>
   
-  
-    <a href="/2023/10/01/%E5%B8%B8%E7%94%A8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2023/10/25/Ubuntu%E9%85%8D%E7%BD%AE%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">常用排序算法总结</div>
+      <div class="article-nav-title">Ubuntu配置桥接模式</div>
     </a>
   
 </nav>

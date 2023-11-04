@@ -73,6 +73,223 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Ubuntu同时开启两张网卡" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/10/27/Ubuntu%E5%90%8C%E6%97%B6%E5%BC%80%E5%90%AF%E4%B8%A4%E5%BC%A0%E7%BD%91%E5%8D%A1/" class="article-date">
+  <time class="dt-published" datetime="2023-10-27T08:16:42.000Z" itemprop="datePublished">2023-10-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Ubuntu%E9%85%8D%E7%BD%AE/">Ubuntu配置</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/10/27/Ubuntu%E5%90%8C%E6%97%B6%E5%BC%80%E5%90%AF%E4%B8%A4%E5%BC%A0%E7%BD%91%E5%8D%A1/">Ubuntu同时开启两张网卡</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="问题：不能同时使用两张网卡"><a href="#问题：不能同时使用两张网卡" class="headerlink" title="问题：不能同时使用两张网卡"></a>问题：不能同时使用两张网卡</h3><p>最近受实习公司安排在学习raw socket。用其写了一个简单的自定义协议(ETHER_Hdr + data)。想测试其能否正常通信，于是想到在虚拟机中再添加一张虚拟网卡，一张用于发送消息一张用于接收消息。</p>
+<p>添加操作还是比较简单，主要分两步：</p>
+<ol>
+<li>在虚拟机的设置中添加一个网络适配器并选择想要的连接方式：</li>
+</ol>
+<p><img src="C:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231027162632884.png" alt="image-20231027162632884"></p>
+<ol start="2">
+<li>​	根据需要在虚拟网络编辑器处添加虚拟网卡</li>
+</ol>
+<p><img src="C:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231027162821388.png" alt="image-20231027162821388"></p>
+<p>进行上述操作后，打开ubuntu20.04。</p>
+<p>用<code>ifconfig</code>命令查看网卡信息，发现现在有两张网卡了，但是只能有一个有ip地址。再发现：两张网卡也不能同时使用，这样肯定是无法模拟通信的。</p>
+<p>同时开启两张网卡解决方式如下：</p>
+<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><blockquote>
+<p>ubuntu从17.10开始，已放弃在&#x2F;etc&#x2F;network&#x2F;interface里固定IP的配置，即使配置也不会生效，而是改成netplan方式，即下面我们用到的这个配置文件</p>
+</blockquote>
+<ol>
+<li>更改如下的配置文件：</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rz@rz-virtual-machine:~$ vim /etc/netplan/01-network-manager-all.yaml </span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>添加如下内容：</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Let NetworkManager manage all devices on this system</span></span><br><span class="line">network:</span><br><span class="line">  version: 2</span><br><span class="line">  renderer: NetworkManager</span><br><span class="line">  ethernets:</span><br><span class="line">    ens33:</span><br><span class="line">      dhcp4: true</span><br><span class="line">    ens37:</span><br><span class="line">      dhcp4: true</span><br></pre></td></tr></table></figure>
+
+<p>注意冒号后面有个空格。ens33和ens37分别是网卡的名字。编辑完后保存退出</p>
+<ol start="3">
+<li>使配置生效</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netplan apply</span><br></pre></td></tr></table></figure>
+
+<p>over!现在发现可以同时打开两张网卡了。</p>
+<p><img src="C:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231027163712892.png" alt="image-20231027163712892"></p>
+<p>说个题外话：测试程序通信的时候要注意两个网卡的ip要在同一网段下。不然无法正常通信~</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/10/27/Ubuntu%E5%90%8C%E6%97%B6%E5%BC%80%E5%90%AF%E4%B8%A4%E5%BC%A0%E7%BD%91%E5%8D%A1/" data-id="clojv053y0000a0v64yao98qt" data-title="Ubuntu同时开启两张网卡" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ubuntu%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/" rel="tag">Ubuntu网络配置</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Ubuntu配置桥接模式" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/10/25/Ubuntu%E9%85%8D%E7%BD%AE%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" class="article-date">
+  <time class="dt-published" datetime="2023-10-25T06:59:04.000Z" itemprop="datePublished">2023-10-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Ubuntu%E9%85%8D%E7%BD%AE/">Ubuntu配置</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/10/25/Ubuntu%E9%85%8D%E7%BD%AE%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/">Ubuntu配置桥接模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>今儿记录以下如何在虚拟机的Ubuntu中配置网络模式为桥接模式</p>
+<p>虚拟机：VMwareWorktionPro17——Ubuntu20.04</p>
+<ol>
+<li>进入虚拟机设置，将网络配置模式改为桥接模式：</li>
+</ol>
+<p><img src="C:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231025150416540.png" alt="image-20231025150416540"></p>
+<ol start="2">
+<li><p>点击VMware上方菜单栏的编辑→选择虚拟网络编辑器→点击更改设置。然后会弹出这样一个界面，点击确定就行</p>
+<p><img src="C:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231025150741927.png" alt="image-20231025150741927"></p>
+</li>
+<li><p>点这</p>
+</li>
+</ol>
+<p><img src="C:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231025150908969.png" alt="image-20231025150908969"></p>
+<ol start="4">
+<li>点击Wird后面的加号，选择Ipv4栏，填写如下。注意这里Ipv4地址要和主机地址在同一网段。</li>
+</ol>
+<p>​	可使用ipconfig &#x2F;all查看主机网卡信息。</p>
+<p><img src="C:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231025151208986.png" alt="image-20231025151208986"></p>
+<p>DNS填8.8.8.8，apply即可。</p>
+<ol start="5">
+<li>选择刚才新建的这个网络配置。这里就完成了桥接网络静态ip的配置。</li>
+<li>测试：</li>
+</ol>
+<p>​	可ping外网：</p>
+<p><img src="C:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231025151546276.png" alt="image-20231025151546276"></p>
+<p>​	可ping主机：</p>
+<p><img src="C:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231025151620064.png" alt="image-20231025151620064"></p>
+<p><strong>注意</strong>：要关闭主机的防火墙才可以ping通。win10关闭方法：左下搜索栏搜索“防火墙”，跳转到设置，全部关闭即可。</p>
+<p>​	主机可ping虚拟机：</p>
+<p><img src="C:\Users\17939\AppData\Roaming\Typora\typora-user-images\image-20231025151756966.png" alt="image-20231025151756966"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/10/25/Ubuntu%E9%85%8D%E7%BD%AE%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" data-id="clojv05420001a0v6ffj4gkg9" data-title="Ubuntu配置桥接模式" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ubuntu%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/" rel="tag">Ubuntu网络配置</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-leetcode27移除元素" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/10/15/leetcode27%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/" class="article-date">
+  <time class="dt-published" datetime="2023-10-15T13:45:12.000Z" itemprop="datePublished">2023-10-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/10/15/leetcode27%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/">leetcode27移除元素</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>不要使用额外的数组空间，你必须仅使用 <code>O(1)</code> 额外空间并”原地”修改输入数组。</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>采用”双指针”解决：一个快指针：fast，一个慢指针：slow </p>
+<p>fast用于找到不需要删除的元素</p>
+<p>slow用于保存下一个被覆盖元素的下标——数组元素删除实际上是将其原本值覆盖了。</p>
+<p>用fast遍历数组</p>
+<table>
+<thead>
+<tr>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">3</th>
+<th align="center">5</th>
+</tr>
+</thead>
+</table>
+<p>以上述数组为例，起初fast、slow都指向1，即fast&#x3D;slow&#x3D;0；</p>
+<p>如果fast指向的元素不等于要删除的值，就将该元素的值赋给slow所在下标处(覆盖)，然后slow++。可理解slow前的为”新数组”。</p>
+<p>如果fast指向的元素等于要删除的值，就不会进行赋值操作，fast继续向后移动。这样遍历完后，slow前面的元素值都不等于要删除的值，slow的大小为”新数组”的长度。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">int removeElement(vector&lt;int&gt;&amp; nums, int val) </span><br><span class="line">&#123;</span><br><span class="line">    int fast = 0, slow = 0;</span><br><span class="line">    for (fast; fast &lt; nums.size(); fast++)</span><br><span class="line">    &#123;</span><br><span class="line">   		if(nums[fast] != val)</span><br><span class="line">    	&#123;</span><br><span class="line">    		nums[slow++] = nums[fast];     // 将快指针指向元素的值赋给slow下标位置的元素</span><br><span class="line">   		&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return slow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>类似于erase方法。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/10/15/leetcode27%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/" data-id="clojv05470004a0v68o1kbxwy" data-title="leetcode27移除元素" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-二分查找" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2023/10/15/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" class="article-date">
@@ -174,7 +391,7 @@
 <li><strong>信号：</strong> 信号是异步通信机制，用于通知进程发生了某个事件。例如，<code>SIGTERM</code>信号用于终止进程，<code>SIGINT</code>信号用于中断进程。（异步通信指的是发送信号的进程可以继续执行，而不必等待接收信号的进程立即响应）</li>
 <li><strong>共享内存：</strong> 共享内存允许多个进程访问同一块内存区域。其原理是通过内存映射，将一个内存区域映射到多个进程的地址空间中，这样多个进程就能共享这块内存。</li>
 </ol>
-<h3 id="进程之间共享资源的方式"><a href="#进程之间共享资源的方式" class="headerlink" title="进程之间共享资源的方式"></a>进程之间共享资源的方式</h3><p>1.消息队列<br>2.共享<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%86%85%E5%AD%98&spm=1001.2101.3001.7020">内存</a><br>3.管道（有名管道。无名管道）<br>4.信号<br>5.套接字</p>
+<h3 id="进程之间共享资源的方式"><a href="#进程之间共享资源的方式" class="headerlink" title="进程之间共享资源的方式"></a>进程之间共享资源的方式</h3><p>1.消息队列<br>2.共享<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%86%85%E5%AD%98&spm=1001.2101.3001.7020">内存</a><br>3.管道（有名管道&#x2F;无名管道）<br>4.信号<br>5.套接字</p>
 <h3 id="同一个进程的不同线程之间可以共享的资源"><a href="#同一个进程的不同线程之间可以共享的资源" class="headerlink" title="同一个进程的不同线程之间可以共享的资源"></a>同一个进程的不同线程之间可以共享的资源</h3><p>进程代码段、进程的公有数据(利用这些共享的数据，线程很容易的实现相互之间的通讯)、进程打开的文件描述符、信号的处理器、进程的当前目录和进程用户ID与进程组ID。</p>
 <p>进程拥有这许多共性的同时，还拥有自己的个性。有了这些个性，线程才能实现并发性。这些个性包括：</p>
 <ol>
@@ -339,7 +556,6 @@
     <div class="e-content article-entry" itemprop="articleBody">
       
         <h1 id="模型概念"><a href="#模型概念" class="headerlink" title="模型概念"></a>模型概念</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p> 生产者消费者问题又称有限缓冲区问题，问题描述如下：假设有一组生产者进程（线程）P1,P2,……Pk和一组消费者进程（线程）C1,C2……Cm，通过n个缓冲区组成缓冲池，共同完成”生产和消费”任务。 </p>
-<p><img src="https://upload-images.jianshu.io/upload_images/20126289-68b831c476d9ca17.png?imageMogr2/auto-orient/strip%7CimageView2/2/format/webp" alt="img"></p>
 <ul>
 <li>生产者生产：生产者往缓冲区中放入物品。</li>
 <li>消费者消费：消费者从缓冲区中取出物品。</li>
@@ -358,7 +574,8 @@
 <h2 id="二者联系"><a href="#二者联系" class="headerlink" title="二者联系"></a>二者联系</h2><p>互斥量允许或阻塞对临界区的访问。</p>
 <p>条件变量允许线程由于一些未达到的条件而阻塞。</p>
 <p>生产者使用互斥量可以进行原子性检查，而不受其他线程干扰。但是当缓冲区已满时，生产者需要阻塞自己并等待被唤醒，这便是条件变量的工作。</p>
-<p>互斥量与条件变量经常一起使用，这种模式用于让一个线程锁住一个互斥量，然后当它不能获得它期待的结果时等待一个条件变量(pthread_cond_wait)。最后一个线程会向它发信号(pthread_cond_signal&#x2F;pthread_cond_broadcast)，使唤醒继续执行。</p>
+<p>互斥量与条件变量经常一起使用，这种模式用于让一个线程锁住一个互斥量，然后当它不能获得它期待的结果时等待一个条件变量(pthread_cond_wait)。最后，一个线程会向它发信号(pthread_cond_signal&#x2F;pthread_cond_broadcast)，使唤醒继续执行。</p>
+<p>(pthread_cond_broadcast唤醒所有在等待的线程)</p>
 <h2 id="使用注意"><a href="#使用注意" class="headerlink" title="使用注意"></a>使用注意</h2><p>条件变量不会存在内存中。如果将一个信号量传递给一个没有线程在等待的条件变量，那么这个信号就会丢失。程序员必须小心使用避免信号丢失。</p>
 <h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>作为如何使用一个互斥锁和条件变量的例子，一下程序展示了一个简单的生产者-消费者问题(一个缓冲区，大小为3)</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAX 10      <span class="comment">// 需要生产的数量</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pthread_mutex_t</span> mutex;</span><br><span class="line"><span class="type">pthread_cond_t</span> condp, condc;</span><br><span class="line"><span class="type">int</span> buf_size = <span class="number">3</span>;      <span class="comment">// 缓冲区大小</span></span><br><span class="line"><span class="type">int</span> buf[<span class="number">3</span>] = &#123;<span class="number">0</span>&#125;;    <span class="comment">// 缓冲区</span></span><br><span class="line"><span class="type">int</span> count = <span class="number">0</span>;       <span class="comment">// 缓冲区已使用大小</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> *<span class="title function_">producer</span><span class="params">(<span class="type">void</span> *arg)</span>  </span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= MAX; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        pthread_mutex_lock(&amp;mutex); </span><br><span class="line">        <span class="keyword">if</span> (count &gt;= buf_size)          <span class="comment">// 缓冲区满   </span></span><br><span class="line">            pthread_cond_wait(&amp;condp, &amp;mutex);   </span><br><span class="line">        </span><br><span class="line">        buf[count] = i;      <span class="comment">// 将数据放入缓冲区</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;pro[%d]---buf[%d]:[%d]\n&quot;</span>, i, count, buf[count]);</span><br><span class="line">        count++;        <span class="comment">// 缓冲区使用+1</span></span><br><span class="line">        pthread_cond_signal(&amp;condc);  </span><br><span class="line">        pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;producer exit\n&quot;</span>);</span><br><span class="line">    pthread_exit(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> *<span class="title function_">consumer</span><span class="params">(<span class="type">void</span> *arg)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= MAX; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        pthread_mutex_lock(&amp;mutex);</span><br><span class="line">        <span class="keyword">if</span> (count &lt;= <span class="number">0</span>)     <span class="comment">// 缓冲区为空</span></span><br><span class="line">            pthread_cond_wait(&amp;condc, &amp;mutex);</span><br><span class="line"></span><br><span class="line">        --count;             <span class="comment">// 缓冲区已用大小-1</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;con[%d]---buf[%d]:[%d]\n&quot;</span>, i, count, buf[count]);</span><br><span class="line">        pthread_cond_signal(&amp;condp);  </span><br><span class="line">        pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;consumer exit\n&quot;</span>);</span><br><span class="line">    pthread_exit(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">pthread_t</span> pro, con;</span><br><span class="line">    pthread_mutex_init(&amp;mutex, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_cond_init(&amp;condp, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_cond_init(&amp;condc, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    pthread_create(&amp;pro, <span class="literal">NULL</span>, producer, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_create(&amp;con, <span class="literal">NULL</span>, consumer, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    pthread_join(pro, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_join(con, <span class="literal">NULL</span>);</span><br><span class="line">    </span><br><span class="line">    pthread_mutex_destroy(&amp;mutex);</span><br><span class="line">    pthread_cond_destroy(&amp;condp);</span><br><span class="line">    pthread_cond_destroy(&amp;condc);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -466,9 +683,7 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>z</p>
-<p>水水水水</p>
-<h1 id="时间复杂度及空间复杂度总结表"><a href="#时间复杂度及空间复杂度总结表" class="headerlink" title="时间复杂度及空间复杂度总结表"></a>时间复杂度及空间复杂度总结表</h1>
+        <h1 id="时间复杂度及空间复杂度"><a href="#时间复杂度及空间复杂度" class="headerlink" title="时间复杂度及空间复杂度"></a>时间复杂度及空间复杂度</h1><h1 id="适用情况"><a href="#适用情况" class="headerlink" title="适用情况"></a>适用情况</h1>
       
     </div>
     <footer class="article-footer">
@@ -496,7 +711,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/">Linux系统编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/">Linux系统编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Ubuntu%E9%85%8D%E7%BD%AE/">Ubuntu配置</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a></li></ul>
     </div>
   </div>
 
@@ -506,7 +721,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" rel="tag">二分查找</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%92%E6%96%A5%E9%87%8F/" rel="tag">互斥量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag">字符串</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="tag">排序算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/" rel="tag">条件变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag">线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%9B%E7%A8%8B/" rel="tag">进程</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/" rel="tag">Ubuntu网络配置</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" rel="tag">二分查找</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%92%E6%96%A5%E9%87%8F/" rel="tag">互斥量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag">字符串</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="tag">排序算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/" rel="tag">条件变量</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag">线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%9B%E7%A8%8B/" rel="tag">进程</a></li></ul>
     </div>
   </div>
 
@@ -516,7 +731,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" style="font-size: 10px;">二分查找</a> <a href="/tags/%E4%BA%92%E6%96%A5%E9%87%8F/" style="font-size: 10px;">互斥量</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 10px;">字符串</a> <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">排序算法</a> <a href="/tags/%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/" style="font-size: 10px;">条件变量</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a>
+      <a href="/tags/Ubuntu%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/" style="font-size: 20px;">Ubuntu网络配置</a> <a href="/tags/leetcode/" style="font-size: 20px;">leetcode</a> <a href="/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" style="font-size: 10px;">二分查找</a> <a href="/tags/%E4%BA%92%E6%96%A5%E9%87%8F/" style="font-size: 10px;">互斥量</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 10px;">字符串</a> <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">排序算法</a> <a href="/tags/%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/" style="font-size: 10px;">条件变量</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a>
     </div>
   </div>
 
@@ -538,23 +753,23 @@
       <ul>
         
           <li>
+            <a href="/2023/10/27/Ubuntu%E5%90%8C%E6%97%B6%E5%BC%80%E5%90%AF%E4%B8%A4%E5%BC%A0%E7%BD%91%E5%8D%A1/">Ubuntu同时开启两张网卡</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/25/Ubuntu%E9%85%8D%E7%BD%AE%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/">Ubuntu配置桥接模式</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/15/leetcode27%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/">leetcode27移除元素</a>
+          </li>
+        
+          <li>
             <a href="/2023/10/15/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/">二分查找</a>
           </li>
         
           <li>
             <a href="/2023/10/13/%E8%BF%9B%E7%A8%8B&%E7%BA%BF%E7%A8%8B/">线程相关概念</a>
-          </li>
-        
-          <li>
-            <a href="/2023/10/10/%E6%B6%88%E8%B4%B9%E8%80%85-%E7%94%9F%E4%BA%A7%E8%80%85%E6%A8%A1%E5%9E%8B-mutex%E5%92%8Ccond%E5%AE%9E%E7%8E%B0/">消费者-生产者模型(mutex和cond实现)</a>
-          </li>
-        
-          <li>
-            <a href="/2023/10/07/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5%E9%97%AE%E9%A2%98/">C语言字符串拼接问题——使用sprintf()函数</a>
-          </li>
-        
-          <li>
-            <a href="/2023/10/01/%E5%B8%B8%E7%94%A8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/">常用排序算法总结</a>
           </li>
         
       </ul>
