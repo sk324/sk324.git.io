@@ -50,37 +50,6 @@
       </tags>
   </entry>
   <entry>
-    <title>leetcode27移除元素</title>
-    <url>/2023/10/15/leetcode27%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/</url>
-    <content><![CDATA[<p>不要使用额外的数组空间，你必须仅使用 <code>O(1)</code> 额外空间并”原地”修改输入数组。</p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>采用”双指针”解决：一个快指针：fast，一个慢指针：slow </p>
-<p>fast用于找到不需要删除的元素</p>
-<p>slow用于保存下一个被覆盖元素的下标——数组元素删除实际上是将其原本值覆盖了。</p>
-<p>用fast遍历数组</p>
-<table>
-<thead>
-<tr>
-<th align="center">1</th>
-<th align="center">2</th>
-<th align="center">3</th>
-<th align="center">4</th>
-<th align="center">3</th>
-<th align="center">5</th>
-</tr>
-</thead>
-</table>
-<p>以上述数组为例，起初fast、slow都指向1，即fast&#x3D;slow&#x3D;0；</p>
-<p>如果fast指向的元素不等于要删除的值，就将该元素的值赋给slow所在下标处(覆盖)，然后slow++。可理解slow前的为”新数组”。</p>
-<p>如果fast指向的元素等于要删除的值，就不会进行赋值操作，fast继续向后移动。这样遍历完后，slow前面的元素值都不等于要删除的值，slow的大小为”新数组”的长度。<span id="more"></span></p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int removeElement(vector&lt;int&gt;&amp; nums, int val) </span><br><span class="line">&#123;</span><br><span class="line">    int fast = 0, slow = 0;</span><br><span class="line">    for (fast; fast &lt; nums.size(); fast++)</span><br><span class="line">    &#123;</span><br><span class="line">   		if(nums[fast] != val)</span><br><span class="line">    	&#123;</span><br><span class="line">    		nums[slow++] = nums[fast];     // 将快指针指向元素的值赋给slow下标位置的元素</span><br><span class="line">   		&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return slow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>类似于erase方法。</p>
-]]></content>
-      <tags>
-        <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>二分查找leetcode704</title>
     <url>/2023/10/15/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
     <content><![CDATA[<h1 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a>算法步骤</h1><ol>
@@ -107,8 +76,51 @@
 <h2 id="相关题目"><a href="#相关题目" class="headerlink" title="相关题目"></a>相关题目</h2><p><em>leetcode704</em></p>
 ]]></content>
       <tags>
-        <tag>leetcode</tag>
         <tag>二分查找</tag>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode27移除元素</title>
+    <url>/2023/10/15/leetcode27%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/</url>
+    <content><![CDATA[<p>不要使用额外的数组空间，你必须仅使用 <code>O(1)</code> 额外空间并”原地”修改输入数组。</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>采用”双指针”解决：一个快指针：fast，一个慢指针：slow </p>
+<p>fast用于找到不需要删除的元素</p>
+<p>slow用于保存下一个被覆盖元素的下标——数组元素删除实际上是将其原本值覆盖了。</p>
+<p>用fast遍历数组</p>
+<table>
+<thead>
+<tr>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">3</th>
+<th align="center">5</th>
+</tr>
+</thead>
+</table>
+<span id="more"></span>以上述数组为例，起初fast、slow都指向1，即fast=slow=0；
+
+<p>如果fast指向的元素不等于要删除的值，就将该元素的值赋给slow所在下标处(覆盖)，然后slow++。可理解slow前的为”新数组”。</p>
+<p>如果fast指向的元素等于要删除的值，就不会进行赋值操作，fast继续向后移动。这样遍历完后，slow前面的元素值都不等于要删除的值，slow的大小为”新数组”的长度。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int removeElement(vector&lt;int&gt;&amp; nums, int val) </span><br><span class="line">&#123;</span><br><span class="line">    int fast = 0, slow = 0;</span><br><span class="line">    for (fast; fast &lt; nums.size(); fast++)</span><br><span class="line">    &#123;</span><br><span class="line">   		if(nums[fast] != val)</span><br><span class="line">    	&#123;</span><br><span class="line">    		nums[slow++] = nums[fast];     // 将快指针指向元素的值赋给slow下标位置的元素</span><br><span class="line">   		&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return slow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>类似于erase方法。</p>
+]]></content>
+      <tags>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>常用排序算法总结</title>
+    <url>/2023/10/01/%E5%B8%B8%E7%94%A8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h1 id="时间复杂度及空间复杂度"><a href="#时间复杂度及空间复杂度" class="headerlink" title="时间复杂度及空间复杂度"></a>时间复杂度及空间复杂度</h1><h1 id="适用情况"><a href="#适用情况" class="headerlink" title="适用情况"></a>适用情况</h1>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>排序算法</tag>
       </tags>
   </entry>
   <entry>
@@ -135,17 +147,6 @@
 ]]></content>
       <tags>
         <tag>字符串</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>常用排序算法总结</title>
-    <url>/2023/10/01/%E5%B8%B8%E7%94%A8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<h1 id="时间复杂度及空间复杂度"><a href="#时间复杂度及空间复杂度" class="headerlink" title="时间复杂度及空间复杂度"></a>时间复杂度及空间复杂度</h1><h1 id="适用情况"><a href="#适用情况" class="headerlink" title="适用情况"></a>适用情况</h1>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>排序算法</tag>
       </tags>
   </entry>
   <entry>
