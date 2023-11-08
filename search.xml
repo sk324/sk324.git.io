@@ -138,56 +138,6 @@
       </tags>
   </entry>
   <entry>
-    <title>常用排序算法总结</title>
-    <url>/2023/10/01/%E5%B8%B8%E7%94%A8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<h1 id="时间复杂度及空间复杂度"><a href="#时间复杂度及空间复杂度" class="headerlink" title="时间复杂度及空间复杂度"></a>时间复杂度及空间复杂度</h1><h1 id="适用情况"><a href="#适用情况" class="headerlink" title="适用情况"></a>适用情况</h1>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>排序算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>消费者-生产者模型(mutex和cond实现)</title>
-    <url>/2023/10/10/%E6%B6%88%E8%B4%B9%E8%80%85-%E7%94%9F%E4%BA%A7%E8%80%85%E6%A8%A1%E5%9E%8B-mutex%E5%92%8Ccond%E5%AE%9E%E7%8E%B0/</url>
-    <content><![CDATA[<h1 id="模型概念"><a href="#模型概念" class="headerlink" title="模型概念"></a>模型概念</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p> 生产者消费者问题又称有限缓冲区问题，问题描述如下：假设有一组生产者进程（线程）P1,P2,……Pk和一组消费者进程（线程）C1,C2……Cm，通过n个缓冲区组成缓冲池，共同完成”生产和消费”任务。 </p>
-<ul>
-<li>生产者生产：生产者往缓冲区中放入物品。</li>
-<li>消费者消费：消费者从缓冲区中取出物品。</li>
-<li>缓冲区交互：缓冲区是临界区，所有针对缓冲区的操作必须互斥进行。</li>
-</ul>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
-<li>缓冲区已满：生产者不能生产→生产者睡眠待消费者消费后(缓冲区未满)唤醒</li>
-<li>缓冲区为空：消费者不能消费→消费者睡眠待生产者生产(缓冲区不为空)后唤醒</li>
-<li>对所有生产者和消费者而言，需将缓冲池看作一个整体，缓冲池是一个临界资源，任何一个进程（线程）要对缓冲池进行”存”或”取”的时候，需要与其他进程（线程）进行互斥</li>
-</ol>
-<h1 id="互斥量与条件变量"><a href="#互斥量与条件变量" class="headerlink" title="互斥量与条件变量"></a>互斥量与条件变量</h1><p>如果不需要信号量的计数能力，有时可以使用信号量的一个简化版本：互斥量。互斥量仅适用于管理共享资源或一小段代码。<strong>互斥量</strong>与<strong>条件变量</strong>通常一起使用。</p>
-<h2 id="互斥量基本原理"><a href="#互斥量基本原理" class="headerlink" title="互斥量基本原理"></a>互斥量基本原理</h2><ul>
-<li>一个线程如果想要进入临界区，它首先尝试锁住相关的互斥量。如果互斥量没有加锁，那么这个线程可以立即进入，并且互斥量被锁定以防止其他线程进入。</li>
-<li>如果互斥量已经被加锁，则调用线程被阻塞，直到该互斥量被解锁。</li>
-</ul>
-<h2 id="二者联系"><a href="#二者联系" class="headerlink" title="二者联系"></a>二者联系</h2><p>互斥量允许或阻塞对临界区的访问。</p>
-<p>条件变量允许线程由于一些未达到的条件而阻塞。</p>
-<p>生产者使用互斥量可以进行原子性检查，而不受其他线程干扰。但是当缓冲区已满时，生产者需要阻塞自己并等待被唤醒，这便是条件变量的工作。</p>
-<p>互斥量与条件变量经常一起使用，这种模式用于让一个线程锁住一个互斥量，然后当它不能获得它期待的结果时等待一个条件变量(pthread_cond_wait)。最后，一个线程会向它发信号(pthread_cond_signal&#x2F;pthread_cond_broadcast)，使唤醒继续执行。</p>
-<p>(pthread_cond_broadcast唤醒所有在等待的线程)</p>
-<h2 id="使用注意"><a href="#使用注意" class="headerlink" title="使用注意"></a>使用注意</h2><p>条件变量不会存在内存中。如果将一个信号量传递给一个没有线程在等待的条件变量，那么这个信号就会丢失。程序员必须小心使用避免信号丢失。</p>
-<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>作为如何使用一个互斥锁和条件变量的例子，一下程序展示了一个简单的生产者-消费者问题(一个缓冲区，大小为3)</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAX 10      <span class="comment">// 需要生产的数量</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pthread_mutex_t</span> mutex;</span><br><span class="line"><span class="type">pthread_cond_t</span> condp, condc;</span><br><span class="line"><span class="type">int</span> buf_size = <span class="number">3</span>;      <span class="comment">// 缓冲区大小</span></span><br><span class="line"><span class="type">int</span> buf[<span class="number">3</span>] = &#123;<span class="number">0</span>&#125;;    <span class="comment">// 缓冲区</span></span><br><span class="line"><span class="type">int</span> count = <span class="number">0</span>;       <span class="comment">// 缓冲区已使用大小</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> *<span class="title function_">producer</span><span class="params">(<span class="type">void</span> *arg)</span>  </span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= MAX; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        pthread_mutex_lock(&amp;mutex); </span><br><span class="line">        <span class="keyword">if</span> (count &gt;= buf_size)          <span class="comment">// 缓冲区满   </span></span><br><span class="line">            pthread_cond_wait(&amp;condp, &amp;mutex);   </span><br><span class="line">        </span><br><span class="line">        buf[count] = i;      <span class="comment">// 将数据放入缓冲区</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;pro[%d]---buf[%d]:[%d]\n&quot;</span>, i, count, buf[count]);</span><br><span class="line">        count++;        <span class="comment">// 缓冲区使用+1</span></span><br><span class="line">        pthread_cond_signal(&amp;condc);  </span><br><span class="line">        pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;producer exit\n&quot;</span>);</span><br><span class="line">    pthread_exit(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> *<span class="title function_">consumer</span><span class="params">(<span class="type">void</span> *arg)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= MAX; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        pthread_mutex_lock(&amp;mutex);</span><br><span class="line">        <span class="keyword">if</span> (count &lt;= <span class="number">0</span>)     <span class="comment">// 缓冲区为空</span></span><br><span class="line">            pthread_cond_wait(&amp;condc, &amp;mutex);</span><br><span class="line"></span><br><span class="line">        --count;             <span class="comment">// 缓冲区已用大小-1</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;con[%d]---buf[%d]:[%d]\n&quot;</span>, i, count, buf[count]);</span><br><span class="line">        pthread_cond_signal(&amp;condp);  </span><br><span class="line">        pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;consumer exit\n&quot;</span>);</span><br><span class="line">    pthread_exit(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">pthread_t</span> pro, con;</span><br><span class="line">    pthread_mutex_init(&amp;mutex, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_cond_init(&amp;condp, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_cond_init(&amp;condc, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    pthread_create(&amp;pro, <span class="literal">NULL</span>, producer, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_create(&amp;con, <span class="literal">NULL</span>, consumer, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    pthread_join(pro, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_join(con, <span class="literal">NULL</span>);</span><br><span class="line">    </span><br><span class="line">    pthread_mutex_destroy(&amp;mutex);</span><br><span class="line">    pthread_cond_destroy(&amp;condp);</span><br><span class="line">    pthread_cond_destroy(&amp;condc);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="输出结果："><a href="#输出结果：" class="headerlink" title="输出结果："></a>输出结果：</h2><img src="/2023/10/10/%E6%B6%88%E8%B4%B9%E8%80%85-%E7%94%9F%E4%BA%A7%E8%80%85%E6%A8%A1%E5%9E%8B-mutex%E5%92%8Ccond%E5%AE%9E%E7%8E%B0/run_result.png" class="" title="fail">
-
-]]></content>
-      <categories>
-        <category>Linux系统编程</category>
-      </categories>
-      <tags>
-        <tag>互斥量</tag>
-        <tag>条件变量</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>线程相关概念</title>
     <url>/2023/10/13/%E8%BF%9B%E7%A8%8B&amp;%E7%BA%BF%E7%A8%8B/</url>
     <content><![CDATA[<h3 id="线程之间的通信方式"><a href="#线程之间的通信方式" class="headerlink" title="线程之间的通信方式"></a>线程之间的通信方式</h3><p>在多线程程序中，使用线程间的同步机制通常更为常见和高效</p>
@@ -330,6 +280,56 @@
       <tags>
         <tag>线程</tag>
         <tag>进程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>消费者-生产者模型(mutex和cond实现)</title>
+    <url>/2023/10/10/%E6%B6%88%E8%B4%B9%E8%80%85-%E7%94%9F%E4%BA%A7%E8%80%85%E6%A8%A1%E5%9E%8B-mutex%E5%92%8Ccond%E5%AE%9E%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="模型概念"><a href="#模型概念" class="headerlink" title="模型概念"></a>模型概念</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p> 生产者消费者问题又称有限缓冲区问题，问题描述如下：假设有一组生产者进程（线程）P1,P2,……Pk和一组消费者进程（线程）C1,C2……Cm，通过n个缓冲区组成缓冲池，共同完成”生产和消费”任务。 </p>
+<ul>
+<li>生产者生产：生产者往缓冲区中放入物品。</li>
+<li>消费者消费：消费者从缓冲区中取出物品。</li>
+<li>缓冲区交互：缓冲区是临界区，所有针对缓冲区的操作必须互斥进行。</li>
+</ul>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
+<li>缓冲区已满：生产者不能生产→生产者睡眠待消费者消费后(缓冲区未满)唤醒</li>
+<li>缓冲区为空：消费者不能消费→消费者睡眠待生产者生产(缓冲区不为空)后唤醒</li>
+<li>对所有生产者和消费者而言，需将缓冲池看作一个整体，缓冲池是一个临界资源，任何一个进程（线程）要对缓冲池进行”存”或”取”的时候，需要与其他进程（线程）进行互斥</li>
+</ol>
+<h1 id="互斥量与条件变量"><a href="#互斥量与条件变量" class="headerlink" title="互斥量与条件变量"></a>互斥量与条件变量</h1><p>如果不需要信号量的计数能力，有时可以使用信号量的一个简化版本：互斥量。互斥量仅适用于管理共享资源或一小段代码。<strong>互斥量</strong>与<strong>条件变量</strong>通常一起使用。</p>
+<h2 id="互斥量基本原理"><a href="#互斥量基本原理" class="headerlink" title="互斥量基本原理"></a>互斥量基本原理</h2><ul>
+<li>一个线程如果想要进入临界区，它首先尝试锁住相关的互斥量。如果互斥量没有加锁，那么这个线程可以立即进入，并且互斥量被锁定以防止其他线程进入。</li>
+<li>如果互斥量已经被加锁，则调用线程被阻塞，直到该互斥量被解锁。</li>
+</ul>
+<h2 id="二者联系"><a href="#二者联系" class="headerlink" title="二者联系"></a>二者联系</h2><p>互斥量允许或阻塞对临界区的访问。</p>
+<p>条件变量允许线程由于一些未达到的条件而阻塞。</p>
+<p>生产者使用互斥量可以进行原子性检查，而不受其他线程干扰。但是当缓冲区已满时，生产者需要阻塞自己并等待被唤醒，这便是条件变量的工作。</p>
+<p>互斥量与条件变量经常一起使用，这种模式用于让一个线程锁住一个互斥量，然后当它不能获得它期待的结果时等待一个条件变量(pthread_cond_wait)。最后，一个线程会向它发信号(pthread_cond_signal&#x2F;pthread_cond_broadcast)，使唤醒继续执行。</p>
+<p>(pthread_cond_broadcast唤醒所有在等待的线程)</p>
+<h2 id="使用注意"><a href="#使用注意" class="headerlink" title="使用注意"></a>使用注意</h2><p>条件变量不会存在内存中。如果将一个信号量传递给一个没有线程在等待的条件变量，那么这个信号就会丢失。程序员必须小心使用避免信号丢失。</p>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>作为如何使用一个互斥锁和条件变量的例子，一下程序展示了一个简单的生产者-消费者问题(一个缓冲区，大小为3)</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAX 10      <span class="comment">// 需要生产的数量</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">pthread_mutex_t</span> mutex;</span><br><span class="line"><span class="type">pthread_cond_t</span> condp, condc;</span><br><span class="line"><span class="type">int</span> buf_size = <span class="number">3</span>;      <span class="comment">// 缓冲区大小</span></span><br><span class="line"><span class="type">int</span> buf[<span class="number">3</span>] = &#123;<span class="number">0</span>&#125;;    <span class="comment">// 缓冲区</span></span><br><span class="line"><span class="type">int</span> count = <span class="number">0</span>;       <span class="comment">// 缓冲区已使用大小</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> *<span class="title function_">producer</span><span class="params">(<span class="type">void</span> *arg)</span>  </span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= MAX; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        pthread_mutex_lock(&amp;mutex); </span><br><span class="line">        <span class="keyword">if</span> (count &gt;= buf_size)          <span class="comment">// 缓冲区满   </span></span><br><span class="line">            pthread_cond_wait(&amp;condp, &amp;mutex);   </span><br><span class="line">        </span><br><span class="line">        buf[count] = i;      <span class="comment">// 将数据放入缓冲区</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;pro[%d]---buf[%d]:[%d]\n&quot;</span>, i, count, buf[count]);</span><br><span class="line">        count++;        <span class="comment">// 缓冲区使用+1</span></span><br><span class="line">        pthread_cond_signal(&amp;condc);  </span><br><span class="line">        pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;producer exit\n&quot;</span>);</span><br><span class="line">    pthread_exit(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> *<span class="title function_">consumer</span><span class="params">(<span class="type">void</span> *arg)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= MAX; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        pthread_mutex_lock(&amp;mutex);</span><br><span class="line">        <span class="keyword">if</span> (count &lt;= <span class="number">0</span>)     <span class="comment">// 缓冲区为空</span></span><br><span class="line">            pthread_cond_wait(&amp;condc, &amp;mutex);</span><br><span class="line"></span><br><span class="line">        --count;             <span class="comment">// 缓冲区已用大小-1</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;con[%d]---buf[%d]:[%d]\n&quot;</span>, i, count, buf[count]);</span><br><span class="line">        pthread_cond_signal(&amp;condp);  </span><br><span class="line">        pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;consumer exit\n&quot;</span>);</span><br><span class="line">    pthread_exit(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">pthread_t</span> pro, con;</span><br><span class="line">    pthread_mutex_init(&amp;mutex, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_cond_init(&amp;condp, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_cond_init(&amp;condc, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    pthread_create(&amp;pro, <span class="literal">NULL</span>, producer, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_create(&amp;con, <span class="literal">NULL</span>, consumer, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    pthread_join(pro, <span class="literal">NULL</span>);</span><br><span class="line">    pthread_join(con, <span class="literal">NULL</span>);</span><br><span class="line">    </span><br><span class="line">    pthread_mutex_destroy(&amp;mutex);</span><br><span class="line">    pthread_cond_destroy(&amp;condp);</span><br><span class="line">    pthread_cond_destroy(&amp;condc);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="输出结果："><a href="#输出结果：" class="headerlink" title="输出结果："></a>输出结果：</h2><img src="/2023/10/10/%E6%B6%88%E8%B4%B9%E8%80%85-%E7%94%9F%E4%BA%A7%E8%80%85%E6%A8%A1%E5%9E%8B-mutex%E5%92%8Ccond%E5%AE%9E%E7%8E%B0/run_result.png" class="" title="fail">
+
+]]></content>
+      <categories>
+        <category>Linux系统编程</category>
+      </categories>
+      <tags>
+        <tag>互斥量</tag>
+        <tag>条件变量</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>常用排序算法总结</title>
+    <url>/2023/10/01/%E5%B8%B8%E7%94%A8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h1 id="时间复杂度及空间复杂度"><a href="#时间复杂度及空间复杂度" class="headerlink" title="时间复杂度及空间复杂度"></a>时间复杂度及空间复杂度</h1><h1 id="适用情况"><a href="#适用情况" class="headerlink" title="适用情况"></a>适用情况</h1>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>排序算法</tag>
       </tags>
   </entry>
 </search>
