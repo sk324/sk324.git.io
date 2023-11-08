@@ -206,7 +206,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-08 09:57:55" itemprop="dateModified" datetime="2023-11-08T09:57:55+08:00">2023-11-08</time>
+      <time title="修改时间：2023-11-08 17:10:38" itemprop="dateModified" datetime="2023-11-08T17:10:38+08:00">2023-11-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -229,44 +229,15 @@
     
     <div class="post-body" itemprop="articleBody">
           <h3 id="问题：不能同时使用两张网卡"><a href="#问题：不能同时使用两张网卡" class="headerlink" title="问题：不能同时使用两张网卡"></a>问题：不能同时使用两张网卡</h3><p>最近受实习公司安排在学习raw socket。用其写了一个简单的自定义协议(ETHER_Hdr + data)。想测试其能否正常通信，于是想到在虚拟机中再添加一张虚拟网卡，一张用于发送消息一张用于接收消息。</p>
-<p>添加操作还是比较简单，主要分两步：</p>
-<ol>
-<li>在虚拟机的设置中添加一个网络适配器并选择想要的连接方式：</li>
-</ol>
-<img src="/2023/10/27/Ubuntu%E5%90%8C%E6%97%B6%E5%BC%80%E5%90%AF%E4%B8%A4%E5%BC%A0%E7%BD%91%E5%8D%A1/1.png" class="" title="404NotFound">
-
-<ol start="2">
-<li>​	根据需要在虚拟网络编辑器处添加虚拟网卡</li>
-</ol>
-<img src="/2023/10/27/Ubuntu%E5%90%8C%E6%97%B6%E5%BC%80%E5%90%AF%E4%B8%A4%E5%BC%A0%E7%BD%91%E5%8D%A1/2.png" class="" title="404NotFound">
-
-<p>进行上述操作后，打开ubuntu20.04。</p>
-<p>用<code>ifconfig</code>命令查看网卡信息，发现现在有两张网卡了，但是只能有一个有ip地址。再发现：两张网卡也不能同时使用，这样肯定是无法模拟通信的。</p>
-<p>同时开启两张网卡解决方式如下：</p>
-<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><blockquote>
-<p>ubuntu从17.10开始，已放弃在&#x2F;etc&#x2F;network&#x2F;interface里固定IP的配置，即使配置也不会生效，而是改成netplan方式，即下面我们用到的这个配置文件</p>
-</blockquote>
-<ol>
-<li>更改如下的配置文件：</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rz@rz-virtual-machine:~$ vim /etc/netplan/01-network-manager-all.yaml </span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>添加如下内容：</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Let NetworkManager manage all devices on this system</span></span><br><span class="line">network:</span><br><span class="line">  version: 2</span><br><span class="line">  renderer: NetworkManager</span><br><span class="line">  ethernets:</span><br><span class="line">    ens33:</span><br><span class="line">      dhcp4: true</span><br><span class="line">    ens37:</span><br><span class="line">      dhcp4: true</span><br></pre></td></tr></table></figure>
-
-<p>注意冒号后面有个空格。ens33和ens37分别是网卡的名字。编辑完后保存退出</p>
-<ol start="3">
-<li>使配置生效</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netplan apply</span><br></pre></td></tr></table></figure>
-
-<p>over!现在发现可以同时打开两张网卡了。</p>
-<img src="/2023/10/27/Ubuntu%E5%90%8C%E6%97%B6%E5%BC%80%E5%90%AF%E4%B8%A4%E5%BC%A0%E7%BD%91%E5%8D%A1/3.png" class="" title="404NotFound">
-
-<p>说个题外话：测试程序通信的时候要注意两个网卡的ip要在同一网段下。不然无法正常通信~</p>
-
+<p>​
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/10/27/Ubuntu%E5%90%8C%E6%97%B6%E5%BC%80%E5%90%AF%E4%B8%A4%E5%BC%A0%E7%BD%91%E5%8D%A1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
