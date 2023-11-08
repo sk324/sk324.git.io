@@ -1,37 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>leetcode27移除元素</title>
-    <url>/2023/10/15/leetcode27%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/</url>
-    <content><![CDATA[<p>不要使用额外的数组空间，你必须仅使用 <code>O(1)</code> 额外空间并”原地”修改输入数组。</p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>采用”双指针”解决：一个快指针：fast，一个慢指针：slow </p>
-<p>fast用于找到不需要删除的元素</p>
-<p>slow用于保存下一个被覆盖元素的下标——数组元素删除实际上是将其原本值覆盖了。</p>
-<p>用fast遍历数组</p>
-<table>
-<thead>
-<tr>
-<th align="center">1</th>
-<th align="center">2</th>
-<th align="center">3</th>
-<th align="center">4</th>
-<th align="center">3</th>
-<th align="center">5</th>
-</tr>
-</thead>
-</table>
-<p>以上述数组为例，起初fast、slow都指向1，即fast&#x3D;slow&#x3D;0；</p>
-<p>如果fast指向的元素不等于要删除的值，就将该元素的值赋给slow所在下标处(覆盖)，然后slow++。可理解slow前的为”新数组”。</p>
-<p>如果fast指向的元素等于要删除的值，就不会进行赋值操作，fast继续向后移动。这样遍历完后，slow前面的元素值都不等于要删除的值，slow的大小为”新数组”的长度。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int removeElement(vector&lt;int&gt;&amp; nums, int val) </span><br><span class="line">&#123;</span><br><span class="line">    int fast = 0, slow = 0;</span><br><span class="line">    for (fast; fast &lt; nums.size(); fast++)</span><br><span class="line">    &#123;</span><br><span class="line">   		if(nums[fast] != val)</span><br><span class="line">    	&#123;</span><br><span class="line">    		nums[slow++] = nums[fast];     // 将快指针指向元素的值赋给slow下标位置的元素</span><br><span class="line">   		&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return slow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>类似于erase方法。</p>
-]]></content>
-      <tags>
-        <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Ubuntu同时开启两张网卡</title>
     <url>/2023/10/27/Ubuntu%E5%90%8C%E6%97%B6%E5%BC%80%E5%90%AF%E4%B8%A4%E5%BC%A0%E7%BD%91%E5%8D%A1/</url>
     <content><![CDATA[<h3 id="问题：不能同时使用两张网卡"><a href="#问题：不能同时使用两张网卡" class="headerlink" title="问题：不能同时使用两张网卡"></a>问题：不能同时使用两张网卡</h3><p>最近受实习公司安排在学习raw socket。用其写了一个简单的自定义协议(ETHER_Hdr + data)。想测试其能否正常通信，于是想到在虚拟机中再添加一张虚拟网卡，一张用于发送消息一张用于接收消息。</p>
@@ -81,6 +50,74 @@
       </tags>
   </entry>
   <entry>
+    <title>leetcode27移除元素</title>
+    <url>/2023/10/15/leetcode27%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/</url>
+    <content><![CDATA[<p>不要使用额外的数组空间，你必须仅使用 <code>O(1)</code> 额外空间并”原地”修改输入数组。</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>采用”双指针”解决：一个快指针：fast，一个慢指针：slow </p>
+<p>fast用于找到不需要删除的元素</p>
+<p>slow用于保存下一个被覆盖元素的下标——数组元素删除实际上是将其原本值覆盖了。</p>
+<p>用fast遍历数组</p>
+<table>
+<thead>
+<tr>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">3</th>
+<th align="center">5</th>
+</tr>
+</thead>
+</table>
+<p>以上述数组为例，起初fast、slow都指向1，即fast&#x3D;slow&#x3D;0；</p>
+<p>如果fast指向的元素不等于要删除的值，就将该元素的值赋给slow所在下标处(覆盖)，然后slow++。可理解slow前的为”新数组”。</p>
+<p>如果fast指向的元素等于要删除的值，就不会进行赋值操作，fast继续向后移动。这样遍历完后，slow前面的元素值都不等于要删除的值，slow的大小为”新数组”的长度。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int removeElement(vector&lt;int&gt;&amp; nums, int val) </span><br><span class="line">&#123;</span><br><span class="line">    int fast = 0, slow = 0;</span><br><span class="line">    for (fast; fast &lt; nums.size(); fast++)</span><br><span class="line">    &#123;</span><br><span class="line">   		if(nums[fast] != val)</span><br><span class="line">    	&#123;</span><br><span class="line">    		nums[slow++] = nums[fast];     // 将快指针指向元素的值赋给slow下标位置的元素</span><br><span class="line">   		&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return slow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>类似于erase方法。</p>
+]]></content>
+      <tags>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C语言字符串拼接问题——使用sprintf()函数</title>
+    <url>/2023/10/07/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="问题引出"><a href="#问题引出" class="headerlink" title="问题引出"></a>问题引出</h1><p>​	写一个程序向一个文件写入内容，当写入文件大小超过 <em>xxxB</em> 时，关闭该文件，重新创建一个文件继续写入。</p>
+<p>​	可应用于写日志文件——保证每个日志文件的大小不过大。</p>
+<p>​	在给文件命名时遇到问题：欲创建并打开“.&#x2F;xxx0 ”,“.&#x2F;xxx1 ”,“.&#x2F;xxx2 ”的文件来写入数据。想到将字符串“.&#x2F;xxx”与int num拼接起来，在此，拼接该字符串与整型时遇到问题，记录一下如何解决的。</p>
+<h1 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h1><ul>
+<li>用**sprintf()**函数</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">char</span> fName[<span class="number">32</span>] = &#123;<span class="number">0</span>&#125;;  <span class="comment">// 打开文件路径</span></span><br><span class="line"><span class="built_in">sprintf</span>(fName, <span class="string">&quot;%s%d&quot;</span>, <span class="string">&quot;./madaemon&quot;</span>, i);  <span class="comment">// 拼接&quot;./madaemon&quot; 与 i</span></span><br><span class="line">fd = open(fName, O_RDWR | O_CREAT | O_APPEND, <span class="number">0777</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这里需要注意：sprintf函数的第一个参数定义一个char数组传入就行了，要确保数组长度有文件路径那么长。</p>
+<h1 id="错误想法"><a href="#错误想法" class="headerlink" title="错误想法"></a>错误想法</h1><ul>
+<li>将一个整型的数强转为数字字符串——不可行</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">char *c = (char*)malloc(sizeof(int));</span><br><span class="line">c = &amp;i;</span><br><span class="line">printf(&quot;%s\n&quot;, c);   // 输出的是i值对应的ASCII码值的字符</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用itoa()函数——不可行</li>
+</ul>
+<p>Linux下没有这个库函数</p>
+]]></content>
+      <tags>
+        <tag>字符串</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>常用排序算法总结</title>
+    <url>/2023/10/01/%E5%B8%B8%E7%94%A8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h1 id="时间复杂度及空间复杂度"><a href="#时间复杂度及空间复杂度" class="headerlink" title="时间复杂度及空间复杂度"></a>时间复杂度及空间复杂度</h1><h1 id="适用情况"><a href="#适用情况" class="headerlink" title="适用情况"></a>适用情况</h1>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>排序算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>二分查找</title>
     <url>/2023/10/15/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
     <content><![CDATA[<h1 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a>算法步骤</h1><ol>
@@ -109,43 +146,6 @@
       <tags>
         <tag>leetcode</tag>
         <tag>二分查找</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>常用排序算法总结</title>
-    <url>/2023/10/01/%E5%B8%B8%E7%94%A8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<h1 id="时间复杂度及空间复杂度"><a href="#时间复杂度及空间复杂度" class="headerlink" title="时间复杂度及空间复杂度"></a>时间复杂度及空间复杂度</h1><h1 id="适用情况"><a href="#适用情况" class="headerlink" title="适用情况"></a>适用情况</h1>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>排序算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C语言字符串拼接问题——使用sprintf()函数</title>
-    <url>/2023/10/07/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="问题引出"><a href="#问题引出" class="headerlink" title="问题引出"></a>问题引出</h1><p>​	写一个程序向一个文件写入内容，当写入文件大小超过 <em>xxxB</em> 时，关闭该文件，重新创建一个文件继续写入。</p>
-<p>​	可应用于写日志文件——保证每个日志文件的大小不过大。</p>
-<p>​	在给文件命名时遇到问题：欲创建并打开“.&#x2F;xxx0 ”,“.&#x2F;xxx1 ”,“.&#x2F;xxx2 ”的文件来写入数据。想到将字符串“.&#x2F;xxx”与int num拼接起来，在此，拼接该字符串与整型时遇到问题，记录一下如何解决的。</p>
-<h1 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h1><ul>
-<li>用**sprintf()**函数</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">char</span> fName[<span class="number">32</span>] = &#123;<span class="number">0</span>&#125;;  <span class="comment">// 打开文件路径</span></span><br><span class="line"><span class="built_in">sprintf</span>(fName, <span class="string">&quot;%s%d&quot;</span>, <span class="string">&quot;./madaemon&quot;</span>, i);  <span class="comment">// 拼接&quot;./madaemon&quot; 与 i</span></span><br><span class="line">fd = open(fName, O_RDWR | O_CREAT | O_APPEND, <span class="number">0777</span>);</span><br></pre></td></tr></table></figure>
-
-<p>这里需要注意：sprintf函数的第一个参数定义一个char数组传入就行了，要确保数组长度有文件路径那么长。</p>
-<h1 id="错误想法"><a href="#错误想法" class="headerlink" title="错误想法"></a>错误想法</h1><ul>
-<li>将一个整型的数强转为数字字符串——不可行</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">char *c = (char*)malloc(sizeof(int));</span><br><span class="line">c = &amp;i;</span><br><span class="line">printf(&quot;%s\n&quot;, c);   // 输出的是i值对应的ASCII码值的字符</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>使用itoa()函数——不可行</li>
-</ul>
-<p>Linux下没有这个库函数</p>
-]]></content>
-      <tags>
-        <tag>字符串</tag>
       </tags>
   </entry>
   <entry>
