@@ -1,37 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>leetcode27移除元素</title>
-    <url>/2023/10/15/leetcode27%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/</url>
-    <content><![CDATA[<p>不要使用额外的数组空间，你必须仅使用 <code>O(1)</code> 额外空间并”原地”修改输入数组。</p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>采用”双指针”解决：一个快指针：fast，一个慢指针：slow </p>
-<p>fast用于找到不需要删除的元素</p>
-<p>slow用于保存下一个被覆盖元素的下标——数组元素删除实际上是将其原本值覆盖了。</p>
-<p>用fast遍历数组</p>
-<table>
-<thead>
-<tr>
-<th align="center">1</th>
-<th align="center">2</th>
-<th align="center">3</th>
-<th align="center">4</th>
-<th align="center">3</th>
-<th align="center">5</th>
-</tr>
-</thead>
-</table>
-<p>以上述数组为例，起初fast、slow都指向1，即fast&#x3D;slow&#x3D;0；</p>
-<p>如果fast指向的元素不等于要删除的值，就将该元素的值赋给slow所在下标处(覆盖)，然后slow++。可理解slow前的为”新数组”。</p>
-<p>如果fast指向的元素等于要删除的值，就不会进行赋值操作，fast继续向后移动。这样遍历完后，slow前面的元素值都不等于要删除的值，slow的大小为”新数组”的长度。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int removeElement(vector&lt;int&gt;&amp; nums, int val) </span><br><span class="line">&#123;</span><br><span class="line">    int fast = 0, slow = 0;</span><br><span class="line">    for (fast; fast &lt; nums.size(); fast++)</span><br><span class="line">    &#123;</span><br><span class="line">   		if(nums[fast] != val)</span><br><span class="line">    	&#123;</span><br><span class="line">    		nums[slow++] = nums[fast];     // 将快指针指向元素的值赋给slow下标位置的元素</span><br><span class="line">   		&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return slow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>类似于erase方法。</p>
-]]></content>
-      <tags>
-        <tag>leetcode</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Ubuntu同时开启两张网卡</title>
     <url>/2023/10/27/Ubuntu%E5%90%8C%E6%97%B6%E5%BC%80%E5%90%AF%E4%B8%A4%E5%BC%A0%E7%BD%91%E5%8D%A1/</url>
     <content><![CDATA[<h3 id="问题：不能同时使用两张网卡"><a href="#问题：不能同时使用两张网卡" class="headerlink" title="问题：不能同时使用两张网卡"></a>问题：不能同时使用两张网卡</h3><p>最近受实习公司安排在学习raw socket。用其写了一个简单的自定义协议(ETHER_Hdr + data)。想测试其能否正常通信，于是想到在虚拟机中再添加一张虚拟网卡，一张用于发送消息一张用于接收消息。</p>
@@ -78,6 +47,37 @@
       </categories>
       <tags>
         <tag>Ubuntu网络配置</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode27移除元素</title>
+    <url>/2023/10/15/leetcode27%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/</url>
+    <content><![CDATA[<p>不要使用额外的数组空间，你必须仅使用 <code>O(1)</code> 额外空间并”原地”修改输入数组。</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>采用”双指针”解决：一个快指针：fast，一个慢指针：slow </p>
+<p>fast用于找到不需要删除的元素</p>
+<p>slow用于保存下一个被覆盖元素的下标——数组元素删除实际上是将其原本值覆盖了。</p>
+<p>用fast遍历数组</p>
+<table>
+<thead>
+<tr>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">3</th>
+<th align="center">5</th>
+</tr>
+</thead>
+</table>
+<p>以上述数组为例，起初fast、slow都指向1，即fast&#x3D;slow&#x3D;0；</p>
+<p>如果fast指向的元素不等于要删除的值，就将该元素的值赋给slow所在下标处(覆盖)，然后slow++。可理解slow前的为”新数组”。</p>
+<p>如果fast指向的元素等于要删除的值，就不会进行赋值操作，fast继续向后移动。这样遍历完后，slow前面的元素值都不等于要删除的值，slow的大小为”新数组”的长度。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int removeElement(vector&lt;int&gt;&amp; nums, int val) </span><br><span class="line">&#123;</span><br><span class="line">    int fast = 0, slow = 0;</span><br><span class="line">    for (fast; fast &lt; nums.size(); fast++)</span><br><span class="line">    &#123;</span><br><span class="line">   		if(nums[fast] != val)</span><br><span class="line">    	&#123;</span><br><span class="line">    		nums[slow++] = nums[fast];     // 将快指针指向元素的值赋给slow下标位置的元素</span><br><span class="line">   		&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return slow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>类似于erase方法。</p>
+]]></content>
+      <tags>
+        <tag>leetcode</tag>
       </tags>
   </entry>
   <entry>
